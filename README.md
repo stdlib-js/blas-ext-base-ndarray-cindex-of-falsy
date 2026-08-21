@@ -41,14 +41,32 @@ limitations under the License.
 
 <!-- /.intro -->
 
+<section class="installation">
 
+## Installation
+
+```bash
+npm install @stdlib/blas-ext-base-ndarray-cindex-of-falsy
+```
+
+Alternatively,
+
+-   To load the package in a website via a `script` tag without installation and bundlers, use the [ES Module][es-module] available on the [`esm`][esm-url] branch (see [README][esm-readme]).
+-   If you are using Deno, visit the [`deno`][deno-url] branch (see [README][deno-readme] for usage intructions).
+-   For use in Observable, or in browser/node environments, use the [Universal Module Definition (UMD)][umd] build available on the [`umd`][umd-url] branch (see [README][umd-readme]).
+
+The [branches.md][branches-url] file summarizes the available branches and displays a diagram illustrating their relationships.
+
+To view installation and usage instructions specific to each branch build, be sure to explicitly navigate to the respective README files on each branch, as linked to above.
+
+</section>
 
 <section class="usage">
 
 ## Usage
 
 ```javascript
-import cindexOfFalsy from 'https://cdn.jsdelivr.net/gh/stdlib-js/blas-ext-base-ndarray-cindex-of-falsy@deno/mod.js';
+var cindexOfFalsy = require( '@stdlib/blas-ext-base-ndarray-cindex-of-falsy' );
 ```
 
 #### cindexOfFalsy( arrays )
@@ -56,26 +74,39 @@ import cindexOfFalsy from 'https://cdn.jsdelivr.net/gh/stdlib-js/blas-ext-base-n
 Returns the index of the first falsy element in a one-dimensional single-precision complex floating-point ndarray.
 
 ```javascript
-import Complex64Vector from 'https://cdn.jsdelivr.net/gh/stdlib-js/ndarray-vector-complex64@deno/mod.js';
+var Complex64Vector = require( '@stdlib/ndarray-vector-complex64' );
+var scalar2ndarray = require( '@stdlib/ndarray-from-scalar' );
 
 var x = new Complex64Vector( [ 1.0, 2.0, 0.0, 0.0, 3.0, 0.0, 2.0, 0.0 ] );
 
-var idx = cindexOfFalsy( [ x ] );
+var fromIndex = scalar2ndarray( 0, {
+    'dtype': 'generic'
+});
+
+var idx = cindexOfFalsy( [ x, fromIndex ] );
 // returns 1
 ```
 
 The function has the following parameters:
 
--   **arrays**: array-like object containing a one-dimensional input ndarray.
+-   **arrays**: array-like object containing the following ndarrays:
+
+    -   a one-dimensional input ndarray.
+    -   a zero-dimensional ndarray containing the index from which to begin searching.
 
 If the function is unable to find a falsy element, the function returns `-1`.
 
 ```javascript
-import Complex64Vector from 'https://cdn.jsdelivr.net/gh/stdlib-js/ndarray-vector-complex64@deno/mod.js';
+var Complex64Vector = require( '@stdlib/ndarray-vector-complex64' );
+var scalar2ndarray = require( '@stdlib/ndarray-from-scalar' );
 
 var x = new Complex64Vector( [ 1.0, 2.0, 3.0, 4.0 ] );
 
-var idx = cindexOfFalsy( [ x ] );
+var fromIndex = scalar2ndarray( 0, {
+    'dtype': 'generic'
+});
+
+var idx = cindexOfFalsy( [ x, fromIndex ] );
 // returns -1
 ```
 
@@ -89,6 +120,7 @@ var idx = cindexOfFalsy( [ x ] );
 
 -   A complex number is falsy when its real and imaginary components are both falsy.
 -   The function explicitly treats `NaN` values as falsy.
+-   If a specified starting search index is negative, the function resolves the starting search index by counting backward from the last element (where `-1` refers to the last element).
 
 </section>
 
@@ -101,10 +133,11 @@ var idx = cindexOfFalsy( [ x ] );
 <!-- eslint no-undef: "error" -->
 
 ```javascript
-import bernoulli from 'https://cdn.jsdelivr.net/gh/stdlib-js/random-array-bernoulli@deno/mod.js';
-import Complex64Vector from 'https://cdn.jsdelivr.net/gh/stdlib-js/ndarray-vector-complex64@deno/mod.js';
-import ndarray2array from 'https://cdn.jsdelivr.net/gh/stdlib-js/ndarray-to-array@deno/mod.js';
-import cindexOfFalsy from 'https://cdn.jsdelivr.net/gh/stdlib-js/blas-ext-base-ndarray-cindex-of-falsy@deno/mod.js';
+var bernoulli = require( '@stdlib/random-array-bernoulli' );
+var Complex64Vector = require( '@stdlib/ndarray-vector-complex64' );
+var scalar2ndarray = require( '@stdlib/ndarray-from-scalar' );
+var ndarray2array = require( '@stdlib/ndarray-to-array' );
+var cindexOfFalsy = require( '@stdlib/blas-ext-base-ndarray-cindex-of-falsy' );
 
 var opts = {
     'dtype': 'float32'
@@ -113,7 +146,11 @@ var opts = {
 var x = new Complex64Vector( bernoulli( 20, 0.7, opts ) );
 console.log( ndarray2array( x ) );
 
-var idx = cindexOfFalsy( [ x ] );
+var fromIndex = scalar2ndarray( 0, {
+    'dtype': 'generic'
+});
+
+var idx = cindexOfFalsy( [ x, fromIndex ] );
 console.log( idx );
 ```
 
@@ -138,7 +175,7 @@ console.log( idx );
 
 ## Notice
 
-This package is part of [stdlib][stdlib], a standard library with an emphasis on numerical and scientific computing. The library provides a collection of robust, high performance libraries for mathematics, statistics, streams, utilities, and more.
+This package is part of [stdlib][stdlib], a standard library for JavaScript and Node.js, with an emphasis on numerical and scientific computing. The library provides a collection of robust, high performance libraries for mathematics, statistics, streams, utilities, and more.
 
 For more information on the project, filing bug reports and feature requests, and guidance on how to develop [stdlib][stdlib], see the main project [repository][stdlib].
 
